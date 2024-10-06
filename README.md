@@ -10,7 +10,9 @@ This report aims to analyze carbon emissions to examine the carbon footprint acr
 Carbon emissions play a crucial role in the environment, accounting for over 75% of global emissions and posing a significant environmental challenge. These emissions contribute to the accumulation of greenhouse gases in the atmosphere, leading to climate change, planetary warming, and involvement in various environmental disasters.
 
 Through this analysis, we hope to gain an understanding of the environmental impact of different industries and contribute to making informed decisions in sustainable development.
-## I. Which products contribute the most to carbon emissions?
+## I.  Which products contribute the most to carbon emissions?
+
+### First we need to find the product name and the total carbon footprint of the product by company.
 
 ```sql
 SELECT product_name AS "PRODUCT NAME" , sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT", COMPANY_NAME
@@ -21,6 +23,8 @@ JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY product_name
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 ```
+### The product that emits the most carbon is Wind Turbine AND THE COMPANY name is "Gamesa Corporación Tecnológica, S.A." 
+
 **The result:**
 | PRODUCT NAME                 | TOTAL CARBON_FOOTPRINT | COMPANY_NAME                            | 
 | ---------------------------: | ---------------------: | --------------------------------------: | 
@@ -29,9 +33,11 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 | Wind Turbine G114 2 Megawats | 1532608                | "Gamesa Corporación Tecnológica, S.A."  | 
 | Wind Turbine G90 2 Megawats  | 1251625                | "Gamesa Corporación Tecnológica, S.A."  | 
 | TCDE                         | 198150                 | "Mitsubishi Gas Chemical Company, Inc." | 
-The product that emits the most carbon is Wind Turbine AND THE COMPANY name is "Gamesa Corporación Tecnológica, S.A." 
+
 
 ## II. What are the industry groups of these products?
+
+### To know the industry group of the product, we have to connect the product_emissions table and the industry_groups table.
 
 ```sql
 SELECT product_name AS "PRODUCT NAME" , sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT", COMPANY_NAME, COUNTRY_NAME , industry_group
@@ -42,6 +48,9 @@ JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY product_name
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 ```
+
+### Electrical Equipment and Machinery is the industry group that accounts for the majority of carbon emissions.
+
 **The result:**
 | PRODUCT NAME                 | TOTAL CARBON_FOOTPRINT | COMPANY_NAME                            | COUNTRY_NAME | industry_group                     | 
 | ---------------------------: | ---------------------: | --------------------------------------: | -----------: | ---------------------------------: | 
@@ -52,6 +61,9 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 | TCDE                         | 198150                 | "Mitsubishi Gas Chemical Company, Inc." | Japan        | Materials                          | 
 
 ## III. What are the industries with the highest contribution to carbon emissions?
+
+### To know which industry group with the highest contribution to carbon emissions, we have to calculate the total carbon emissions.
+
 ```sql
 SELECT  INDUSTRY_GROUP, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
@@ -61,6 +73,9 @@ JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY industry_group
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 ```
+
+### Electrical Equipment and Machinery và Automobiles & Components  là 2 nhóm ngành chiếm tỉ trọng cao nhất so với số còn lại
+
 **The result:**
 | INDUSTRY_GROUP                     | TOTAL CARBON_FOOTPRINT | 
 | ---------------------------------: | ---------------------: | 
@@ -71,8 +86,9 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 | Capital Goods                      | 258712                 | 
 
 
-
 ## IV. What are the companies with the highest contribution to carbon emissions?
+
+### We have to calculate the total carbon footprint of the product by company name.
 
 ```sql
 SELECT  COMPANY_NAME, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
@@ -83,6 +99,7 @@ JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY industry_group
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 ```
+### "Gamesa Corporación Tecnológica, S.A."  is the name of the company have the highest carbon emissions.
 
 **The result:**
 | COMPANY_NAME                           | TOTAL CARBON_FOOTPRINT | 
@@ -97,6 +114,8 @@ The company with the highest contribution to carbon emissions is "Gamesa Corpora
 
 ## V. What are the countries with the highest contribution to carbon emissions?
 
+### To calculate the amount of carbon emissions of a country, we must connect the product_emissions table and the contries table and then calculate the total amount of carbon emissions by country.
+
 ```sql
 SELECT  COUNTRY_NAME, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
@@ -106,7 +125,9 @@ JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY industry_group
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 ```
+
 ### SPAIN is the country that had the highest contribution to the carbon emissions
+
 **The result:**
 | COUNTRY_NAME | TOTAL CARBON_FOOTPRINT | 
 | -----------: | ---------------------: | 
@@ -117,6 +138,8 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 | Japan        | 258712                 | 
 
 ## VI. What is the trend of carbon footprints (PCFs) over the years?
+
+### If you want to know the amount of emissions each year, you must calculate the total emissions for that year.
 
 ```sql
 SELECT YEAR, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
@@ -129,6 +152,7 @@ ORDER BY YEAR ASC LIMIT 5
 ```
 
 ### Carbon is decrease over the year
+
 **The result:**
 | YEAR | TOTAL CARBON_FOOTPRINT | 
 | ---: | ---------------------: | 
@@ -141,6 +165,8 @@ ORDER BY YEAR ASC LIMIT 5
 
 
 ## VII. Which industry groups has demonstrated the most notable decrease in carbon footprints (PCFs) over time?
+
+### To know which industry group has reduced emissions each year, we must calculate the total emissions of that industry group each year and still operate.
 
 ```sql
 SELECT INDUSTRY_GROUP,YEAR, SUM(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
