@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/450dec72-db2e-475e-8fb5-e28b94c50448)
 
-What is the project about?
+# What is the project about?
 
 
 This report aims to analyze carbon emissions to examine the carbon footprint across various industries. We aim to identify sectors with the highest levels of emissions by analyzing them across countries and years, as well as to uncover trends.
@@ -10,8 +10,9 @@ This report aims to analyze carbon emissions to examine the carbon footprint acr
 Carbon emissions play a crucial role in the environment, accounting for over 75% of global emissions and posing a significant environmental challenge. These emissions contribute to the accumulation of greenhouse gases in the atmosphere, leading to climate change, planetary warming, and involvement in various environmental disasters.
 
 Through this analysis, we hope to gain an understanding of the environmental impact of different industries and contribute to making informed decisions in sustainable development.
-STEP 1: Which products contribute the most to carbon emissions?
+## I. Which products contribute the most to carbon emissions?
 
+```sql
 SELECT product_name AS "PRODUCT NAME" , sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT", COMPANY_NAME
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -19,7 +20,8 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY product_name
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
-
+```
+**The result:**
 | PRODUCT NAME                 | TOTAL CARBON_FOOTPRINT | COMPANY_NAME                            | 
 | ---------------------------: | ---------------------: | --------------------------------------: | 
 | Wind Turbine G128 5 Megawats | 3718044                | "Gamesa Corporación Tecnológica, S.A."  | 
@@ -29,8 +31,9 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 | TCDE                         | 198150                 | "Mitsubishi Gas Chemical Company, Inc." | 
 The product that emits the most carbon is Wind Turbine AND THE COMPANY name is "Gamesa Corporación Tecnológica, S.A." 
 
-STEP 2: What are the industry groups of these products?
+## II. What are the industry groups of these products?
 
+```sql
 SELECT product_name AS "PRODUCT NAME" , sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT", COMPANY_NAME, COUNTRY_NAME , industry_group
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -38,7 +41,8 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY product_name
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
-
+```
+**The result:**
 | PRODUCT NAME                 | TOTAL CARBON_FOOTPRINT | COMPANY_NAME                            | COUNTRY_NAME | industry_group                     | 
 | ---------------------------: | ---------------------: | --------------------------------------: | -----------: | ---------------------------------: | 
 | Wind Turbine G128 5 Megawats | 3718044                | "Gamesa Corporación Tecnológica, S.A."  | Spain        | Electrical Equipment and Machinery | 
@@ -47,7 +51,8 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 | Wind Turbine G90 2 Megawats  | 1251625                | "Gamesa Corporación Tecnológica, S.A."  | Spain        | Electrical Equipment and Machinery | 
 | TCDE                         | 198150                 | "Mitsubishi Gas Chemical Company, Inc." | Japan        | Materials                          | 
 
-STEP 3: What are the industries with the highest contribution to carbon emissions?
+## III. What are the industries with the highest contribution to carbon emissions?
+```sql
 SELECT  INDUSTRY_GROUP, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -55,7 +60,8 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY industry_group
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
-
+```
+**The result:**
 | INDUSTRY_GROUP                     | TOTAL CARBON_FOOTPRINT | 
 | ---------------------------------: | ---------------------: | 
 | Electrical Equipment and Machinery | 9801558                | 
@@ -66,7 +72,9 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 
 
 
-STEP 4: What are the companies with the highest contribution to carbon emissions?
+## IV. What are the companies with the highest contribution to carbon emissions?
+
+```sql
 SELECT  COMPANY_NAME, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -74,7 +82,9 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY industry_group
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
+```
 
+**The result:**
 | COMPANY_NAME                           | TOTAL CARBON_FOOTPRINT | 
 | -------------------------------------: | ---------------------: | 
 | "Gamesa Corporación Tecnológica, S.A." | 9801558                | 
@@ -85,7 +95,9 @@ ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
 
 The company with the highest contribution to carbon emissions is "Gamesa Corporación Tecnológica, S.A." 
 
-STEP 5: What are the countries with the highest contribution to carbon emissions?
+## V. What are the countries with the highest contribution to carbon emissions?
+
+```sql
 SELECT  COUNTRY_NAME, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -93,8 +105,9 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY industry_group
 ORDER BY sum(carbon_footprint_pcf) desc LIMIT 5
-
-SPAIN is the country that had the highest contribution to the carbon emissions
+```
+### SPAIN is the country that had the highest contribution to the carbon emissions
+**The result:**
 | COUNTRY_NAME | TOTAL CARBON_FOOTPRINT | 
 | -----------: | ---------------------: | 
 | Spain        | 9801558                | 
@@ -103,8 +116,9 @@ SPAIN is the country that had the highest contribution to the carbon emissions
 | USA          | 363776                 | 
 | Japan        | 258712                 | 
 
-STEP 6: What is the trend of carbon footprints (PCFs) over the years?
+## VI. What is the trend of carbon footprints (PCFs) over the years?
 
+```sql
 SELECT YEAR, sum(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -112,7 +126,10 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY YEAR
 ORDER BY YEAR ASC LIMIT 5
+```
 
+### Carbon is decrease over the year
+**The result:**
 | YEAR | TOTAL CARBON_FOOTPRINT | 
 | ---: | ---------------------: | 
 | 2013 | 503857                 | 
@@ -120,10 +137,12 @@ ORDER BY YEAR ASC LIMIT 5
 | 2015 | 10840415               | 
 | 2016 | 1640182                | 
 | 2017 | 340271                 | 
-Carbon is decrease over the year
 
-STEP 7: Which industry groups has demonstrated the most notable decrease in carbon footprints (PCFs) over time?
 
+
+## VII. Which industry groups has demonstrated the most notable decrease in carbon footprints (PCFs) over time?
+
+```sql
 SELECT INDUSTRY_GROUP,YEAR, SUM(carbon_footprint_pcf) "TOTAL CARBON_FOOTPRINT"
 FROM product_emissions
 JOIN companies 		 ON companies.id = product_emissions.company_id
@@ -131,7 +150,10 @@ JOIN industry_groups ON industry_groups.id = product_emissions.industry_group_id
 JOIN countries 		 ON countries.id = product_emissions.country_id
 GROUP BY INDUSTRY_GROUP,YEAR
 ORDER BY INDUSTRY_GROUP ASC
+```
+### "Food, Beverage & Tobacco", Software & Services And Media,Software & Services prove that they can notable decrease in carbon footprints (PCFs) over time.
 
+**The result:**
 | INDUSTRY_GROUP                                                         | YEAR | TOTAL_CARBON_FOOTPRINT | 
 | ---------------------------------------------------------------------: | ---: | ---------------------: | 
 | "Consumer Durables, Household and Personal Products"                   | 2015 | 931                    | 
@@ -204,6 +226,5 @@ ORDER BY INDUSTRY_GROUP ASC
 | Utilities                                                              | 2013 | 122                    | 
 | Utilities                                                              | 2016 | 122                    | 
 
-"Food, Beverage & Tobacco", Software & Services And Media,Software & Services prove that they can notable decrease in carbon footprints (PCFs) over time.
 
 
